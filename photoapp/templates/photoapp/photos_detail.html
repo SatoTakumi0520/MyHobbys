@@ -1,0 +1,20 @@
+{% extends 'photoapp/base.html' %}
+
+{% block content %}
+
+<div class="photo-detail">
+
+<img src="{{ photo.image.url }}" class="photo-img">
+<div class="photo-info">
+    <a href="{% url 'photoapp:users_detail' photo.user.id %}">@{{ photo.user }}</a>
+</div>
+
+<h2>{{ photo.title }}</h2>
+<p>{{ photo.comment }}</p>
+
+<!-- 削除ボタン -->
+<form method="post" action="{% url 'photoapp:photos_delete' photo.id %}">{% csrf_token %}
+    <button class="btn" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
+</form>
+</div>
+{% endblock %}
