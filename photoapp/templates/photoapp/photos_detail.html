@@ -14,7 +14,10 @@
 
 <!-- 削除ボタン -->
 <form method="post" action="{% url 'photoapp:photos_delete' photo.id %}">{% csrf_token %}
+  {% if request.user.is_authenticated %}
     <button class="btn" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
+  {% else %}
+  {% endif %}
 </form>
 </div>
 {% endblock %}
