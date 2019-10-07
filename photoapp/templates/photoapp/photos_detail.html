@@ -1,16 +1,49 @@
 {% extends 'photoapp/base.html' %}
-
 {% block content %}
+{%load static%}
+
+<!-- 投入テキストの感情分析を行うためにインプットしているもの -->
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/theme/animated.js"></script>
+<script type="javascript" src="{% static 'js/app.js' %}"></script>
+<!--script src="app.js"></script-->
+<style>
+  #scoreChart{
+   width: 50%;
+   height:230px;
+   }
+</style>
+<!--ここまで-->
 
 <div class="photo-detail">
-
 <img src="{{ photo.image.url }}" class="photo-img">
 <div class="photo-info">
     <a href="{% url 'photoapp:users_detail' photo.user.id %}">@{{ photo.user }}</a>
 </div>
-
 <h2>{{ photo.title }}</h2>
 <p>{{ photo.comment }}</p>
+
+<!-- キャプションテキスト分析処理の記述 -->
+<h3>この思い出は楽しかった？？</h3>
+<form id="uploadForm" action="{% url 'photoapp:sentimentanalys' % }">
+  <button class="btn" type="submit" onclick='return confirm("思い出を分析しますか？");'>思い出分析</button>
+</form>
+<!--メータ形式で分析結果を表示-->
+<section>
+  <h3>Score</h3>
+  <div id="scoreChart"></div>
+  score: -1.0(ネガティブ)~1.0(ポジティブ)
+</section>
+<!--感情強度の形式で分析結果を表示-->
+<section>
+  <h3>感情強度</h3>
+  <div id="magnitudeChart"></div>
+  感情強度:0.0~ +inf
+</section>
+<h3>                      </h3>
 
 <!-- 削除ボタン -->
 <form method="post" action="{% url 'photoapp:photos_delete' photo.id %}">{% csrf_token %}
